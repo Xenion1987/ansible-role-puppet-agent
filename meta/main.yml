@@ -6,11 +6,11 @@ dependencies: []
 galaxy_info:
   author: "Xenion1987"
   company: "Access-InTech"
-  description: "Template repository for creating ansible roles"
+  description: "Install and configure Puppet"
   license: "BSD, MIT"
   min_ansible_version: "2.11"
   namespace: "xenion1987"
-  role_name: "template_ansible_role"
+  role_name: "puppet"
   # platforms:
   #   - name: Debian
   #     versions:

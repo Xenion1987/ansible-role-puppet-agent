@@ -9,7 +9,7 @@ on:
 
 defaults:
   run:
-    working-directory: "template-ansible-role"
+    working-directory: "ansible-role-puppet"
 
 jobs:
   lint:
@@ -18,7 +18,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          path: "template-ansible-role"
+          path: "ansible-role-puppet"
 
       - name: Set up Python 3.
         uses: actions/setup-python@v5
@@ -43,7 +43,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          path: "template-ansible-role"
+          path: "ansible-role-puppet"
 
       - name: Set up Python 3.
         uses: actions/setup-python@v5

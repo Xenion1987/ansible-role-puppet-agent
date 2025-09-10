@@ -22,20 +22,5 @@
       ansible.builtin.setup:
 
   roles:
-    - role: template-ansible-role
-      vars:
-        user_management_default_ssh_from: ["1.1.1.1"]
-        user_management_group_ssh_from: ["2.2.2.2"]
-        user_management_host_ssh_from: ["3.3.3.3"]
-        user_management_users:
-          - name: molecule_test
-            absolute_home_path: /opt/molecule_test
-            custom_ssh_from: ["4.4.4.4"]
-            gecos: Mole Cule,Room 123,212-555-0000,212-555-3456,mole.cule@azbycx.tld
-            # password: 'mypassword' sha512 encrypted
-            password: $6$hUyQQf65j3czoiSV$gckRY17sJxEKgiHPqXszseZs.6x5Ehu995GixUnPnSB018J4ijM7Xw.3/B6xmVTlqUJzPQhITMH3hpHXwD14r.
-            primary_group: molecule
-            secondary_groups: ["testing"]
-            groups_append: true
-            ssh_public_keys:
-              - ssh-rsa AAAAB3NzakGUg/a4nViDJGhuFty+4yR8fWQ== ansible-role-user-management-1
+    - role: ansible-role-puppet
+      vars: {}
