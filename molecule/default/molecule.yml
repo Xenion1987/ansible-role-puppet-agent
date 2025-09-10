@@ -1,0 +1,15 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: instance
+    image: "${MOLECULE_DISTRO:-debian:12}"
+    pre_build_image: true
+    privileged: false
+### Required for 'offline' role testing
+provisioner:
+  name: ansible
+  env:
+    ANSIBLE_ROLES_PATH: "../../../"
