@@ -6,7 +6,9 @@ skip_list:
   - name[template]
 
 exclude_paths:
+  - .ansibledoctor.yml
   - .ansible/
   - .git/
   - .github/
+  - molecule/
   - venv/

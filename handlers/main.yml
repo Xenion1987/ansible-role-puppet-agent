@@ -1,1 +1,16 @@
 ---
+# handlers file for roles/puppet
+- name: Enable puppet
+  ansible.builtin.service:
+    name: puppet
+    enabled: true
+
+- name: Start puppet
+  ansible.builtin.service:
+    name: puppet
+    state: started
+
+- name: Restart puppet
+  ansible.builtin.service:
+    name: puppet
+    state: restarted

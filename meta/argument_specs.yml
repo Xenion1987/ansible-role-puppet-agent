@@ -4,18 +4,98 @@ argument_specs:
   main:
     author:
       - Xenion1987
+    short_description: Install and configure Puppet agent
     description:
-      - This is a
-      - mulit line
-      - description
-    short_description: Main tasks for role ROLENAME
+      - This role installs and configures the Puppet agent on Debian- or RedHat-like systems.
     options:
-      option1:
-        choices:
-          - choices if
-          - type list
-        default: "default value"
-        description: "A single line descryption"
-        required: false
-        # ['str', 'list', 'dict', 'bool', 'int', 'float', 'path', 'raw', 'jsonarg', 'json', 'bytes', 'bits']
+      puppet_all_major_version:
+        type: str
+        description: >
+          Which Puppet major version to use. May be formatted like `X`, `X.X` or `X.X.X`.
+        default: 8
+
+      puppet_all_package_dependencies:
         type: list
+        elements: str
+        description: Puppet's dependencies.
+        default:
+          - ca-certificates
+          - gnupg2
+
+      puppet_all_repo_type:
+        type: str
+        description: >
+          Which puppet repository to use. May be either `enterprise` or `community`.
+        default: community
+
+      puppet_all_runinterval:
+        type: str
+        description: How long to start another Puppet run.
+        default: "60m"
+
+      puppet_all_server:
+        type: str
+        description: Puppet Server's FQDN.
+        default: puppet.domain.tld
+
+      puppet_all_config_main:
+        type: dict
+        description: >
+          Puppet's config file values for the `[main]` section.
+        default:
+          runinterval: "{{ puppet_all_runinterval }}"
+          server: "{{ puppet_all_server }}"
+
+      puppet_debian_binary_path:
+        type: str
+        description: Puppet's binary path on Debian like systems.
+        default: /opt/puppetlabs/bin/puppet
+
+      puppet_debian_config_path:
+        type: str
+        description: Puppet's config file path on Debian like systems.
+        default: /etc/puppetlabs/puppet/puppet.conf
+
+      puppet_debian_package_dependencies:
+        type: list
+        elements: str
+        description: Puppet's dependencies on Debian like systems.
+        default:
+          - apt-transport-https
+
+      puppet_debian_repo_name:
+        type: str
+        description: Puppet's package repository for Debian like systems.
+        default: https://apt.puppet.com
+
+      puppet_debian_gpg_key_url:
+        type: str
+        description: Puppet's GPG Key URL for Debian like systems.
+        default: https://apt.puppet.com/DEB-GPG-KEY-future
+
+      puppet_redhat_binary_path:
+        type: str
+        description: Puppet's binary path on RedHat like systems.
+        default: /opt/puppetlabs/puppet/bin/puppet
+
+      puppet_redhat_config_path:
+        type: str
+        description: Puppet's config file path on RedHat like systems.
+        default: /etc/puppetlabs/puppet/puppet.conf
+
+      puppet_redhat_package_dependencies:
+        type: list
+        elements: str
+        description: Puppet's dependencies on RedHat like systems.
+        default: []
+
+      puppet_redhat_repo_name:
+        type: str
+        description: Puppet's package repository for RedHat like systems.
+        default: >-
+          https://yum.puppet.com/puppet{{ puppet_all_major_version.split('.')[0] }}-release-el-{{ ansible_distribution_major_version }}.noarch.rpm
+
+      puppet_redhat_gpg_key_url:
+        type: str
+        description: Puppet's GPG Key URL for RedHat like systems.
+        default: https://yum.puppet.com/RPM-GPG-KEY-puppet

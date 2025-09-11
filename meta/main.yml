@@ -6,24 +6,23 @@ dependencies: []
 galaxy_info:
   author: "Xenion1987"
   company: "Access-InTech"
-  description: "Install and configure Puppet"
+  description: "Install and configure Puppet agent"
   license: "BSD, MIT"
   min_ansible_version: "2.11"
   namespace: "xenion1987"
-  role_name: "puppet"
-  # platforms:
-  #   - name: Debian
-  #     versions:
-  #       - all
-  #   - name: Rocky
-  #     versions:
-  #       - all
-  #   - name: Ubuntu
-  #     versions:
-  #       - all
-  # galaxy_tags:
-  #   - authorizedkeys
-  #   - groups
-  #   - sudoers
-  #   - system
-  #   - users
+  role_name: "puppet_agent"
+  platforms:
+    - name: Debian
+      versions:
+        - all
+    - name: Rocky
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - configuration
+    - packaging
+    - puppet
+    - system

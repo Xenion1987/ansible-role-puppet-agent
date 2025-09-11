@@ -1,0 +1,40 @@
+---
+- name: Ensure dependencies are installed.
+  loop:
+    - "{{ puppet_all_package_dependencies }}"
+    - "{{ puppet_debian_package_dependencies }}"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+
+- name: Add Puppet Labs repository.
+  block:
+    - name: Get Puppet repository key
+      ansible.builtin.get_url:
+        url: "{{ puppet_debian_gpg_key_url }}"
+        dest: "/etc/apt/keyrings/puppet{{ puppet_all_major_version }}-{{ ansible_distribution_release }}.asc"
+        mode: "0644"
+
+    - name: DEBUG
+      ansible.builtin.debug:
+        msg: >-
+          deb [signed-by=/etc/apt/keyrings/puppet{{ puppet_all_major_version }}-{{ ansible_distribution_release }}.asc] {{ puppet_debian_repo_name }} {{ ansible_distribution_release }} puppet{{ puppet_all_major_version }}
+
+    - name: Install Puppet repository
+      ansible.builtin.apt_repository:
+        repo: >-
+          deb [signed-by=/etc/apt/keyrings/puppet{{ puppet_all_major_version }}-{{ ansible_distribution_release }}.asc] {{ puppet_debian_repo_name }} {{ ansible_distribution_release }} puppet{{ puppet_all_major_version }}
+        state: present
+        filename: puppet{{ puppet_all_major_version }}-{{ ansible_distribution_release }}
+
+- name: Install Puppet
+  notify:
+    - Enable puppet
+    - Start puppet
+  ansible.builtin.apt:
+    update_cache: true
+    name:
+      - puppet-agent
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

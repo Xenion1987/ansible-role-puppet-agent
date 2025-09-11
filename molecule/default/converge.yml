@@ -22,5 +22,5 @@
       ansible.builtin.setup:
 
   roles:
-    - role: ansible-role-puppet
+    - role: ansible-role-puppet-agent
       vars: {}

@@ -1,0 +1,30 @@
+---
+- name: Ensure dependencies are installed.
+  loop:
+    - "{{ puppet_all_package_dependencies }}"
+    - "{{ puppet_redhat_package_dependencies }}"
+  ansible.builtin.dnf:
+    name: "{{ item }}"
+    state: present
+
+- name: Add Puppet Labs repository. # noqa: command-instead-of-module
+  changed_when: false
+  ansible.builtin.command:
+    cmd: "rpm -U {{ puppet_redhat_repo_name }}/puppet{{ puppet_all_major_version.split('.')[0] }}-release-el-{{ ansible_distribution_major_version }}.noarch.rpm"
+
+- name: Import Puppet GPG key
+  ansible.builtin.rpm_key:
+    state: present
+    key: "{{ puppet_redhat_gpg_key_url }}"
+
+- name: Install Puppet
+  notify:
+    - Enable puppet
+    - Start puppet
+  ansible.builtin.dnf:
+    update_cache: true
+    name:
+      - puppet-agent
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

@@ -1,1 +1,22 @@
 ---
+puppet_all_major_version: 8
+puppet_all_package_dependencies:
+  - ca-certificates
+  - gnupg2
+puppet_all_repo_type: community
+puppet_all_runinterval: 60m
+puppet_all_server: puppet.domain.tld
+puppet_all_config_main:
+  runinterval: "{{ puppet_all_runinterval }}"
+  server: "{{ puppet_all_server }}"
+puppet_debian_binary_path: /opt/puppetlabs/bin/puppet
+puppet_debian_config_path: /etc/puppetlabs/puppet/puppet.conf
+puppet_debian_package_dependencies:
+  - apt-transport-https
+puppet_debian_repo_name: "https://apt.puppet.com"
+puppet_debian_gpg_key_url: "https://apt.puppet.com/DEB-GPG-KEY-future"
+puppet_redhat_binary_path: /opt/puppetlabs/puppet/bin/puppet
+puppet_redhat_config_path: /etc/puppetlabs/puppet/puppet.conf
+puppet_redhat_package_dependencies: []
+puppet_redhat_repo_name: "https://yum.puppet.com"
+puppet_redhat_gpg_key_url: "https://yum.puppet.com/RPM-GPG-KEY-puppet"
