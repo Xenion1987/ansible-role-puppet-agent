@@ -23,4 +23,3 @@
 
   roles:
     - role: ansible-role-puppet-agent
-      vars: {}

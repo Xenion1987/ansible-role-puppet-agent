@@ -1,16 +1,19 @@
 ---
 # handlers file for roles/puppet
 - name: Enable puppet
+  ignore_errors: "{{ ansible_check_mode }}"
   ansible.builtin.service:
     name: puppet
     enabled: true
 
 - name: Start puppet
+  ignore_errors: "{{ ansible_check_mode }}"
   ansible.builtin.service:
     name: puppet
     state: started
 
 - name: Restart puppet
+  ignore_errors: "{{ ansible_check_mode }}"
   ansible.builtin.service:
     name: puppet
     state: restarted

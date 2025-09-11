@@ -15,10 +15,10 @@
         dest: "/etc/apt/keyrings/puppet{{ puppet_all_major_version }}-{{ ansible_distribution_release }}.asc"
         mode: "0644"
 
-    - name: DEBUG
-      ansible.builtin.debug:
-        msg: >-
-          deb [signed-by=/etc/apt/keyrings/puppet{{ puppet_all_major_version }}-{{ ansible_distribution_release }}.asc] {{ puppet_debian_repo_name }} {{ ansible_distribution_release }} puppet{{ puppet_all_major_version }}
+    # - name: DEBUG
+    #   ansible.builtin.debug:
+    #     msg: >-
+    #       deb [signed-by=/etc/apt/keyrings/puppet{{ puppet_all_major_version }}-{{ ansible_distribution_release }}.asc] {{ puppet_debian_repo_name }} {{ ansible_distribution_release }} puppet{{ puppet_all_major_version }}
 
     - name: Install Puppet repository
       ansible.builtin.apt_repository:

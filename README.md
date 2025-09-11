@@ -60,7 +60,7 @@ puppet_all_config_main:
 
 ### puppet_all_major_version
 
-Which Puppet major version to use. May be formatted like `X`, `X.X` or `X.X.X`.
+Which Puppet major version to use. May be formatted like `"X"`, `"X.X"` or `"X.X.X"`.
 
 
 **_Type:_** str<br />
@@ -68,7 +68,7 @@ Which Puppet major version to use. May be formatted like `X`, `X.X` or `X.X.X`.
 #### Default value
 
 ```YAML
-puppet_all_major_version: 8
+puppet_all_major_version: '8'
 ```
 
 ### puppet_all_package_dependencies
@@ -124,10 +124,6 @@ puppet_all_server: puppet.domain.tld
 
 ### puppet_debian_binary_path
 
-Puppet's binary path on Debian like systems.
-
-**_Type:_** str<br />
-
 #### Default value
 
 ```YAML
@@ -135,10 +131,6 @@ puppet_debian_binary_path: /opt/puppetlabs/bin/puppet
 ```
 
 ### puppet_debian_config_path
-
-Puppet's config file path on Debian like systems.
-
-**_Type:_** str<br />
 
 #### Default value
 
@@ -148,10 +140,6 @@ puppet_debian_config_path: /etc/puppetlabs/puppet/puppet.conf
 
 ### puppet_debian_gpg_key_url
 
-Puppet's GPG Key URL for Debian like systems.
-
-**_Type:_** str<br />
-
 #### Default value
 
 ```YAML
@@ -159,10 +147,6 @@ puppet_debian_gpg_key_url: https://apt.puppet.com/DEB-GPG-KEY-future
 ```
 
 ### puppet_debian_package_dependencies
-
-Puppet's dependencies on Debian like systems.
-
-**_Type:_** list<br />
 
 #### Default value
 
@@ -173,10 +157,6 @@ puppet_debian_package_dependencies:
 
 ### puppet_debian_repo_name
 
-Puppet's package repository for Debian like systems.
-
-**_Type:_** str<br />
-
 #### Default value
 
 ```YAML
@@ -184,10 +164,6 @@ puppet_debian_repo_name: https://apt.puppet.com
 ```
 
 ### puppet_redhat_binary_path
-
-Puppet's binary path on RedHat like systems.
-
-**_Type:_** str<br />
 
 #### Default value
 
@@ -197,10 +173,6 @@ puppet_redhat_binary_path: /opt/puppetlabs/puppet/bin/puppet
 
 ### puppet_redhat_config_path
 
-Puppet's config file path on RedHat like systems.
-
-**_Type:_** str<br />
-
 #### Default value
 
 ```YAML
@@ -208,10 +180,6 @@ puppet_redhat_config_path: /etc/puppetlabs/puppet/puppet.conf
 ```
 
 ### puppet_redhat_gpg_key_url
-
-Puppet's GPG Key URL for RedHat like systems.
-
-**_Type:_** str<br />
 
 #### Default value
 
@@ -221,10 +189,6 @@ puppet_redhat_gpg_key_url: https://yum.puppet.com/RPM-GPG-KEY-puppet
 
 ### puppet_redhat_package_dependencies
 
-Puppet's dependencies on RedHat like systems.
-
-**_Type:_** list<br />
-
 #### Default value
 
 ```YAML
@@ -232,10 +196,6 @@ puppet_redhat_package_dependencies: []
 ```
 
 ### puppet_redhat_repo_name
-
-Puppet's package repository for RedHat like systems.
-
-**_Type:_** str<br />
 
 #### Default value
 
