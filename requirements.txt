@@ -5,3 +5,8 @@ ansible-core>=2.11
 ### For local development only
 # ansible-lint
 # pre-commit
+# molecule 
+### Either use docker 
+## molecule-plugins[docker] docker
+### or use podman
+### molecule-plugins[podman] podman

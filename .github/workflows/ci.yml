@@ -9,7 +9,7 @@ on:
 
 defaults:
   run:
-    working-directory: "template-ansible-role"
+    working-directory: "ansible-role-puppet-agent"
 
 jobs:
   lint:
@@ -18,7 +18,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          path: "template-ansible-role"
+          path: "ansible-role-puppet-agent"
 
       - name: Set up Python 3.
         uses: actions/setup-python@v5
@@ -36,14 +36,14 @@ jobs:
     strategy:
       matrix:
         distro:
-          - "debian:12"
-          - "rockylinux:9"
-          - "ubuntu:24.04"
+          - "debian12"
+          - "rockylinux9"
+          - "ubuntu2404"
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          path: "template-ansible-role"
+          path: "ansible-role-puppet-agent"
 
       - name: Set up Python 3.
         uses: actions/setup-python@v5

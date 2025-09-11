@@ -1,3 +1,53 @@
 ---
-- name: PING
-  ansible.builtin.ping:
+# tasks file for roles/puppet
+- name: Check if puppet agent is installed
+  register: is_puppet_installed
+  ansible.builtin.stat:
+    path: >-
+      {{ puppet_debian_binary_path if ansible_facts['os_family'] | lower == 'debian' else puppet_redhat_binary_path }}
+
+- name: Setup Puppet
+  block:
+    - name: "Include install tasks for {{ ansible_facts['os_family'] }}"
+      when: not is_puppet_installed.stat.exists
+      ansible.builtin.include_tasks:
+        file: "install-{{ ansible_facts['os_family'] | lower }}.yml"
+    - name: Add/Update Puppet config
+      ignore_errors: "{{ ansible_check_mode }}"
+      notify:
+        - Restart puppet
+      ansible.builtin.blockinfile:
+        path: >-
+          {{ puppet_debian_config_path if ansible_facts['os_family'] | lower == 'debian' else puppet_redhat_config_path }}
+        # append_newline: true # requires ansible-core >= 2.16
+        backup: true
+        insertafter: '^\[main\]'
+        marker: "### {mark} ANSIBLE MANAGED BLOCK ###"
+        block: |
+          {% for key, value in puppet_all_config_main.items() %}
+          {{ key }} = {{ value }}
+          {% endfor %}
+    - name: Flush Handler
+      ansible.builtin.meta: flush_handlers
+
+- name: Skip block if run via Molecule
+  when: not is_molecule
+  block:
+    - name: Run 'puppet agent --test'
+      changed_when:
+        - puppet_agent_test.rc == 2
+      failed_when: # multiple conditions handled like 'and'
+        - puppet_agent_test.rc > 0
+        - puppet_agent_test.rc != 2
+        - puppet_agent_test.rc != 4
+        - '"still need to sign" not in puppet_agent_test.stdout'
+      ignore_errors: "{{ ansible_check_mode }}"
+      register: puppet_agent_test
+      ansible.builtin.command:
+        cmd: >-
+          {{ puppet_debian_binary_path if ansible_facts['os_family'] | lower == 'debian' else puppet_redhat_binary_path }} agent -t
+
+    - name: Print sign message
+      when: "'still need to sign' in puppet_agent_test.stdout"
+      ansible.builtin.debug:
+        msg: "Please sign the certificate '{{ inventory_hostname }}' on your Puppet-Server."
