@@ -8,6 +8,11 @@ argument_specs:
     description:
       - This role installs and configures the Puppet agent on Debian- or RedHat-like systems.
     options:
+      puppet_all_auto_sign_certificate:
+        type: bool
+        description: >
+          Allow to sign certs by delegated puppet server.
+        default: false
       puppet_all_major_version:
         type: str
         description: >

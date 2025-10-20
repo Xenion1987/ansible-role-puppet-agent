@@ -31,23 +31,51 @@
       ansible.builtin.meta: flush_handlers
 
 - name: Skip block if run via Molecule
-  when: not is_molecule
+  when: not is_molecule | d(false)
   block:
-    - name: Run 'puppet agent --test'
-      changed_when:
-        - puppet_agent_test.rc == 2
-      failed_when: # multiple conditions handled like 'and'
-        - puppet_agent_test.rc > 0
-        - puppet_agent_test.rc != 2
-        - puppet_agent_test.rc != 4
-        - '"still need to sign" not in puppet_agent_test.stdout'
-      ignore_errors: "{{ ansible_check_mode }}"
-      register: puppet_agent_test
-      ansible.builtin.command:
-        cmd: >-
-          {{ puppet_debian_binary_path if ansible_facts['os_family'] | lower == 'debian' else puppet_redhat_binary_path }} agent -t
+    - name: Run puppet agent
+      block:
+        - name: Run puppet agent
+          ignore_errors: "{{ ansible_check_mode }}"
+          register: puppet_agent_test
+          community.general.puppet:
+            noop: true
+      rescue:
+        - name: FAIL | Puppet run was not successful
+          when:
+            - "puppet_agent_test is not defined or 'still need to sign' not in puppet_agent_test.stdout"
+          ansible.builtin.fail:
+            msg: |
+              "Puppet agent returned an error:
+              {{ puppet_agent_test.msg | default('Unbekannter Fehler') }}"
+        - name: DEBUG | Certificate has not been signed yet
+          when:
+            - puppet_agent_test is defined
+            - "'still need to sign' in puppet_agent_test.stdout"
+          ansible.builtin.debug:
+            msg: "Certificate for '{{ inventory_hostname }}' has not been signed yet."
 
-    - name: Print sign message
-      when: "'still need to sign' in puppet_agent_test.stdout"
-      ansible.builtin.debug:
-        msg: "Please sign the certificate '{{ inventory_hostname }}' on your Puppet-Server."
+- name: Sign certificate on Puppet server
+  ignore_errors: "{{ ansible_check_mode }}"
+  when:
+    - not is_molecule | d(false)
+    - puppet_all_auto_sign_certificate
+  block:
+    - name: Check if certificate is already signed
+      changed_when: "'Requested Certificates' in puppet_server_ca_list.stdout"
+      delegate_to: "{{ puppet_all_server }}"
+      failed_when: "'Missing Certificates' in puppet_server_ca_list.stdout"
+      register: puppet_server_ca_list
+      until: "('Requested Certificates' in puppet_server_ca_list.stdout) or ('Signed Certificates' in puppet_server_ca_list.stdout)"
+      retries: 2
+      delay: 10
+      ansible.builtin.command: |
+        /opt/puppetlabs/bin/puppetserver ca list --certname {{ inventory_hostname }}
+
+    - name: Sign certificate on Puppet server
+      changed_when: false
+      delegate_to: "{{ puppet_all_server }}"
+      register: puppet_server_ca_list
+      when: "'Requested Certificates' in puppet_server_ca_list.stdout"
+      ansible.builtin.command: |
+        /opt/puppetlabs/bin/puppetserver ca list --certname {{ inventory_hostname }}
