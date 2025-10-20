@@ -13,6 +13,7 @@ This role installs and configures the Puppet agent on Debian- or RedHat-like sys
 
 - [Requirements](#requirements)
 - [Default Variables](#default-variables)
+  - [puppet_all_auto_sign_certificate](#puppet_all_auto_sign_certificate)
   - [puppet_all_config_main](#puppet_all_config_main)
   - [puppet_all_major_version](#puppet_all_major_version)
   - [puppet_all_package_dependencies](#puppet_all_package_dependencies)
@@ -40,6 +41,19 @@ This role installs and configures the Puppet agent on Debian- or RedHat-like sys
 - Minimum Ansible version: `2.11`
 
 ## Default Variables
+
+### puppet_all_auto_sign_certificate
+
+Allow to sign certs by delegated puppet server.
+
+
+**_Type:_** bool<br />
+
+#### Default value
+
+```YAML
+puppet_all_auto_sign_certificate: false
+```
 
 ### puppet_all_config_main
 
