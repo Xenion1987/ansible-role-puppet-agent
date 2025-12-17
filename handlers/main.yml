@@ -17,3 +17,12 @@
   ansible.builtin.service:
     name: puppet
     state: restarted
+
+- name: Run puppet agent (dry-run)
+  ignore_errors: "{{ ansible_check_mode }}"
+  community.general.puppet:
+    noop: true
+
+- name: Run puppet agent
+  ignore_errors: "{{ ansible_check_mode }}"
+  community.general.puppet:
