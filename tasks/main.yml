@@ -75,7 +75,10 @@
     - name: Sign certificate on Puppet server
       changed_when: false
       delegate_to: "{{ puppet_all_server }}"
-      register: puppet_server_ca_list
+      notify: Run puppet agent
       when: "'Requested Certificates' in puppet_server_ca_list.stdout"
       ansible.builtin.command: |
-        /opt/puppetlabs/bin/puppetserver ca list --certname {{ inventory_hostname }}
+        /opt/puppetlabs/bin/puppetserver ca sign --certname {{ inventory_hostname }}
+
+- name: Flush Handler
+  ansible.builtin.meta: flush_handlers
