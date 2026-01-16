@@ -35,7 +35,7 @@
   block:
     - name: Run puppet agent
       block:
-        - name: Run puppet agent
+        - name: Run puppet agent (dry-run)
           ignore_errors: "{{ ansible_check_mode }}"
           register: puppet_agent_test
           community.general.puppet:
@@ -71,14 +71,11 @@
       delay: 10
       ansible.builtin.command: |
         /opt/puppetlabs/bin/puppetserver ca list --certname {{ inventory_hostname }}
-
     - name: Sign certificate on Puppet server
-      changed_when: false
+      changed_when: "'Successfully signed certificate request' in puppet_server_ca_sign.stdout"
       delegate_to: "{{ puppet_all_server }}"
       notify: Run puppet agent
+      register: puppet_server_ca_sign
       when: "'Requested Certificates' in puppet_server_ca_list.stdout"
       ansible.builtin.command: |
         /opt/puppetlabs/bin/puppetserver ca sign --certname {{ inventory_hostname }}
-
-- name: Flush Handler
-  ansible.builtin.meta: flush_handlers
